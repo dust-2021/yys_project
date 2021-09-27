@@ -1,16 +1,16 @@
-# This is a sample Python script.
+from fight import Fighting
+from role import Role
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    round_fight = Fighting()
+    snake = Role('大蛇', 199999, 5000, 2000, 135)
+    gui_qie_one = Role('鬼切', 28000, 3000, 700, 156)
+    gui_qie_two = Role('鬼切', 28000, 3000, 700, 156)
+    gui_qie_three = Role('鬼切', 28000, 3000, 700, 156)
+    qing_ming = Role('晴明', 15000, 6000, 1300, 128)
+    round_fight.role_add(snake)
+    # round_fight.role_add(gui_qie_two)
+    # round_fight.role_add(gui_qie_one)
+    round_fight.role_add(gui_qie_three, role_type=0)
+    round_fight.role_add(qing_ming, role_type=0)
+    round_fight.fight_start()
