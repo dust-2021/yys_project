@@ -1,7 +1,6 @@
 from concurrent.futures import ThreadPoolExecutor
 import time
 import datetime
-
 from role import Role
 
 
@@ -25,13 +24,24 @@ class Fighting:
         self.right_fire_act = 0
         self.left_fire_yield = fire_yield()
         self.right_fire_yield = fire_yield()
+        self.auto_ = False
 
     def fight_start(self):
+        """
+        the fight start
+        :return: None
+        """
         print('fight started')
         with ThreadPoolExecutor(max_workers=10) as pool:
             pool.submit(self.__act)
 
     def role_add(self, roles: Role, role_type: int = 1):
+        """
+        add role into the fight before start
+        :param roles:
+        :param role_type:
+        :return:
+        """
         if role_type:
             self.left_roles.append(roles)
             roles.camp = 'left'
@@ -40,6 +50,10 @@ class Fighting:
             roles.camp = 'right'
 
     def __act(self):
+        """
+        calculate which role is going to act
+        :return: None
+        """
         self.the_length = max(x.__getattribute__('speed') for x in self.right_roles + self.left_roles)
         for x in self.right_roles + self.left_roles:
             x.location = x.__getattribute__('speed')
@@ -57,6 +71,12 @@ class Fighting:
                 del min_time_cost
 
     def __the_act(self, role: Role):
+        """
+        the real act for a role
+        :param role: the act role
+        :return: None
+        """
+        print(self)
         camps = role.__getattribute__('camp')
         if camps == 'left':
             self.left_fire_act += 1
@@ -81,10 +101,10 @@ class Fighting:
             f'{role.name}行动\n'
             f'行动条{[f"{x.name}:{round(x.location / self.the_length * 100, 1)}%" for x in self.right_roles + self.left_roles]}')
 
-        [print(x) for x in self.right_roles + self.left_roles]
-        role.skill_select()
-        time.sleep(5)
+        role.skill_select([self.left_roles, self.right_roles])
+        print('err')
 
+        # calculate if the fight should to be done
         if not self.right_roles:
             time_cost: datetime.timedelta = datetime.datetime.now() - self.start_time
             print('win in %s second' % time_cost.seconds)
@@ -97,10 +117,8 @@ class Fighting:
 
         role.location = 0
 
-
-def main():
-    pass
-
-
-if __name__ == '__main__':
-    main()
+    def __repr__(self):
+        str_s = ""
+        for x in self.right_roles + self.left_roles:
+            str_s += x.__repr__() + '\n'
+        return str_s
