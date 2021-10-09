@@ -9,6 +9,8 @@ class RoleSkill:
         self.fire_cost = fire_cost
         self.target_count = target_count
 
+        self.auto_skill = False
+
     def target_get(self, self_role: Role, all_target=None, auto: bool = False):
         if auto:
             pass

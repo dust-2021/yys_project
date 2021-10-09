@@ -1,6 +1,6 @@
 import random
 from functools import reduce
-
+from functools import reduce
 from typing import List
 
 defensive_ = 300
@@ -20,11 +20,21 @@ class Role:
         self.skills = []
         self.buff = []
 
+        # 增减伤
+        self.out_damage_effect = [1, 1, 1, 1, 1]
+        self.get_damage_effect = [1 - self.defensive / (self.defensive + defensive_), 1, 1, 1]
+
+    def round_start(self):
+        pass
+
+    def round_end(self):
+        pass
+
     def skill_select(self, all_target=None):
         """
-        player select a skill
-        :param all_target: all the role in the round
-        :return: None
+        选择技能影响对象
+        :param all_target: 所有对局中角色，由fight实例传入
+        :return: 无
         """
         if all_target is None:
             all_target = [[], []]
@@ -36,12 +46,12 @@ class Role:
 
     def attacked_by_role(self, role, damage_value):
         """
-        role be damage attack
-        :param role: the role attack
-        :param damage_value: the original damage
-        :return: None
+        角色受到攻击
+        :param role: 发起攻击的角色
+        :param damage_value: 受到攻击的原始伤害
+        :return: 无
         """
-        final_damage = damage_value * (defensive_ / (defensive_ + self.defensive)) * (1 - 0.01 * random.random())
+        final_damage = damage_value * reduce(lambda x, y: x * y, self.get_damage_effect)
         self.health -= final_damage
         print(f"{self.name}受到{role.name}{final_damage}点伤害")
         if self.health <= 0:

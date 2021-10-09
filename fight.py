@@ -30,16 +30,17 @@ class Fighting:
 
     def fight_start(self):
         """
-        the fight start
+        战斗开始
         :return: None
         """
         print('fight started')
-        with ThreadPoolExecutor(max_workers=10) as pool:
-            pool.submit(self.__act)
+        self.__act()
+        # with ThreadPoolExecutor(max_workers=10) as pool:
+        #     pool.submit(self.__act)
 
     def role_add(self, roles: Role, role_type: int = 1):
         """
-        add role into the fight before start
+        初始化战斗角色
         :param roles:
         :param role_type:
         :return:
@@ -53,7 +54,7 @@ class Fighting:
 
     def __act(self):
         """
-        calculate which role is going to act
+        计算行动条，行动角色传入行动回合方法
         :return: None
         """
         self.the_length = max(x.__getattribute__('speed') for x in self.right_roles + self.left_roles)
@@ -74,8 +75,8 @@ class Fighting:
 
     def __the_act(self, role: Role):
         """
-        the real act for a role
-        :param role: the act role
+        核心方法，行动回合
+        :param role: 行动角色
         :return: None
         """
         print(self)
@@ -103,8 +104,9 @@ class Fighting:
             f'{role.name}行动\n'
             f'行动条{[f"{x.name}:{round(x.location / self.the_length * 100, 1)}%" for x in self.right_roles + self.left_roles]}')
 
+        role.round_start()
         role.skill_select([self.left_roles, self.right_roles])
-        print('err')
+        role.round_end()
 
         # calculate if the fight should to be done
         if not self.right_roles:
